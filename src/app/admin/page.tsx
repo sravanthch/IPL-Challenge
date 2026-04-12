@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 import { getTeam, formatMatchDate, formatMatchTime } from '@/lib/utils';
-import { TeamCode, UserName } from '@/lib/types';
 import { supabase } from '@/lib/supabase';
-import { Shield, Loader2, CheckCircle, XCircle, Trophy, Lock } from 'lucide-react';
+import { Shield, Loader2, CheckCircle, XCircle, Trophy, Lock, Ban } from 'lucide-react';
+import { TeamCode, MatchResult } from '@/lib/types';
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'ipl2026admin';
 
@@ -18,7 +18,7 @@ export default function AdminPage() {
   const [pwdError, setPwdError] = useState('');
 
   const [selectedMatch, setSelectedMatch] = useState<number | null>(null);
-  const [selectedWinner, setSelectedWinner] = useState<TeamCode | null>(null);
+  const [selectedWinner, setSelectedWinner] = useState<MatchResult | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -39,7 +39,7 @@ export default function AdminPage() {
   }, [matchesWithData]);
 
   const handleSaveResult = async () => {
-    if (!selectedMatch || !selectedWinner) return;
+    if (!selectedMatch || selectedWinner === null) return;
     setSaving(true);
     setSaveError('');
     setSaveSuccess(false);
@@ -217,9 +217,14 @@ export default function AdminPage() {
                     </div>
                     <span className="text-white font-semibold text-sm">{match.team2}</span>
                   </div>
-                  {match.result && (
+                  {match.result && match.result !== 'NR' && (
                     <span className="ml-auto text-amber-400 text-xs font-bold">
                       🏆 {match.result} won
+                    </span>
+                  )}
+                  {match.result === 'NR' && (
+                    <span className="ml-auto text-slate-400 text-xs font-bold flex items-center gap-1">
+                      <Ban size={11} /> No Result
                     </span>
                   )}
                 </div>
@@ -228,7 +233,7 @@ export default function AdminPage() {
                 {isSelected && (
                   <div className="border-t border-white/5 pt-4 mt-2 fade-in-up">
                     <p className="text-xs text-slate-400 mb-3 font-medium">Select the winner:</p>
-                    <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="grid grid-cols-2 gap-3 mb-3">
                       {([match.team1, match.team2] as TeamCode[]).map((code) => {
                         const team = getTeam(code);
                         const isSel = selectedWinner === code;
@@ -261,6 +266,23 @@ export default function AdminPage() {
                         );
                       })}
                     </div>
+
+                    {/* No Result button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedWinner('NR');
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 transition-all mb-4 text-sm font-semibold"
+                      style={{
+                        background: selectedWinner === 'NR' ? 'rgba(100,116,139,0.2)' : 'rgba(15,23,42,0.5)',
+                        borderColor: selectedWinner === 'NR' ? '#64748B' : 'rgba(255,255,255,0.08)',
+                        color: selectedWinner === 'NR' ? '#CBD5E1' : '#64748B',
+                      }}
+                    >
+                      <Ban size={15} />
+                      No Result (Washed Out / Cancelled)
+                    </button>
 
                     {saveError && (
                       <div className="text-red-400 text-xs bg-red-400/10 px-3 py-2 rounded-lg mb-3 flex items-center gap-1">

@@ -3,16 +3,16 @@
 import { useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 import { getUserColor, getUserInitials, getTeam, formatMatchDate, formatMatchTime } from '@/lib/utils';
-import { UserName, TeamCode } from '@/lib/types';
+import { UserName, TeamCode, MatchResult } from '@/lib/types';
 import { BarChart2, CheckCircle, XCircle, Clock } from 'lucide-react';
 
 const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];
 
-function PredBadge({ pred, result }: { pred: TeamCode | null; result?: TeamCode | null }) {
+function PredBadge({ pred, result }: { pred: TeamCode | null; result?: MatchResult | null }) {
   if (!pred) return <span className="text-slate-600 text-xs">—</span>;
   const team = getTeam(pred);
-  const isCorrect = result === pred;
-  const isWrong = result && result !== pred;
+  const isCorrect = result !== 'NR' && result === pred;
+  const isWrong = result && (result === 'NR' || result !== pred);
 
   return (
     <div className="flex items-center gap-1">
@@ -130,7 +130,11 @@ export default function HistoryPage() {
 
                   {/* Result */}
                   <div className="w-20 text-center">
-                    {match.result ? (
+                    {match.result === 'NR' ? (
+                      <span className="text-[10px] text-slate-400 font-bold italic px-2 py-1 bg-slate-800/80 rounded">
+                        No Result
+                      </span>
+                    ) : match.result ? (
                       <div>
                         <div
                           className="text-xs font-bold px-2 py-0.5 rounded"

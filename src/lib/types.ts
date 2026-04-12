@@ -1,6 +1,7 @@
 export type UserName = 'Sravanth' | 'Srivatsav' | 'Sathwik' | 'Vikhyath' | 'Nithin';
 
-export type TeamCode = 'CSK' | 'MI' | 'RCB' | 'KKR' | 'RR' | 'GT' | 'PBKS' | 'LSG';
+export type TeamCode = 'CSK' | 'MI' | 'RCB' | 'KKR' | 'RR' | 'GT' | 'PBKS' | 'LSG' | 'SRH' | 'DC';
+export type MatchResult = TeamCode | 'NR';
 
 export interface Team {
   code: TeamCode;
@@ -33,7 +34,7 @@ export interface DbPrediction {
 export interface DbResult {
   id: string;
   match_id: number;
-  winner: TeamCode;
+  winner: MatchResult;
   created_at: string;
 }
 
@@ -53,7 +54,7 @@ export interface LeaderboardEntry {
 }
 
 export interface MatchWithData extends Match {
-  result?: TeamCode | null;
+  result?: MatchResult | null;
   predictions: Record<UserName, TeamCode | null>;
   isLocked: boolean; // deadline passed
   isCompleted: boolean; // result entered

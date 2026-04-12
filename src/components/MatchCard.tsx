@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useApp } from '@/context/AppContext';
-import { MatchWithData, TeamCode, UserName } from '@/lib/types';
+import { MatchWithData, TeamCode, UserName, MatchResult } from '@/lib/types';
 import { getTeam, getUserColor, getUserInitials, formatMatchTime } from '@/lib/utils';
 import TeamBadge from './TeamBadge';
 import Countdown from './Countdown';
@@ -18,13 +18,13 @@ const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nith
 function PredictionChip({ userName, predicted, result }: {
   userName: UserName;
   predicted: TeamCode | null;
-  result?: TeamCode | null;
+  result?: MatchResult | null;
 }) {
   const color = getUserColor(userName);
   const initials = getUserInitials(userName);
   const team = predicted ? getTeam(predicted) : null;
-  const isCorrect = result && predicted === result;
-  const isWrong = result && predicted && predicted !== result;
+  const isCorrect = result && result !== 'NR' && predicted === result;
+  const isWrong = result && (result === 'NR' || (predicted && predicted !== result));
 
   return (
     <div className="flex flex-col items-center gap-1.5 min-w-0">
@@ -133,7 +133,13 @@ export default function MatchCard({ match, onPredict }: Props) {
 
         {/* VS divider */}
         <div className="flex flex-col items-center gap-1 shrink-0">
-          <div className="text-slate-600 font-black text-sm md:text-xl italic">VS</div>
+          {match.result === 'NR' ? (
+            <div className="text-slate-400 font-bold text-xs md:text-sm italic px-2 py-1 bg-slate-800/80 rounded-md">
+              No Result
+            </div>
+          ) : (
+            <div className="text-slate-600 font-black text-sm md:text-xl italic">VS</div>
+          )}
           {match.isCompleted && !match.result && (
             <span className="text-[9px] text-slate-600">TBD</span>
           )}

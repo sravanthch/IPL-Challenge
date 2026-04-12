@@ -24,14 +24,20 @@ export default function LeaderboardPage() {
         if (pred) {
           total++;
           if (match.result) {
-            if (pred === match.result) correct++;
+            // NR matches don't award points to anyone
+            if (match.result !== 'NR' && pred === match.result) correct++;
+            // NR matches still count as decided (not pending), but don't affect accuracy
           } else if (match.isLocked) {
             pending++;
           }
         }
       });
 
-      const decided = total - pending;
+      // Accuracy: correct / (decided matches that had a real winner, not NR)
+      const nrCount = matchesWithData.filter(
+        (m) => m.result === 'NR' && m.predictions[user]
+      ).length;
+      const decided = total - pending - nrCount;
       const accuracy = decided > 0 ? Math.round((correct / decided) * 100) : 0;
 
       return { userName: user, correct, total, pending, accuracy };
@@ -201,10 +207,14 @@ export default function LeaderboardPage() {
                   {' vs '}
                   <span style={{ color: t2.primaryColor }}>{match.team2}</span>
                 </span>
-                {winner && (
+                {winner === 'NR' ? (
+                  <span className="text-xs text-slate-400 font-medium italic">No Result</span>
+                ) : winner ? (
                   <span className="text-xs text-amber-400 font-medium">{winner} won</span>
-                )}
-                <span className="text-xs text-slate-500">{correct}/{USERS.length} correct</span>
+                ) : null}
+                <span className="text-xs text-slate-500">
+                  {winner === 'NR' ? '0' : correct}/{USERS.length} correct
+                </span>
               </div>
             );
           })}

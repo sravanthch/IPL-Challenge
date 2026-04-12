@@ -16,6 +16,7 @@ import {
   DbPrediction,
   DbResult,
   MatchWithData,
+  MatchResult,
 } from '@/lib/types';
 
 interface AppContextType {
@@ -102,7 +103,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     return {
       ...match,
-      result: result ? (result.winner as TeamCode) : null,
+      result: result ? (result.winner as MatchResult) : null,
       predictions: predsByUser as Record<UserName, TeamCode | null>,
       isLocked,
       isCompleted,
