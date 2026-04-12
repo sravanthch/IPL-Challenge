@@ -93,7 +93,7 @@ export default function HomePage() {
           </div>
           <h2 className="text-xl font-bold text-white mb-2">Login to Start Predicting</h2>
           <p className="text-slate-400 text-sm mb-6">
-            Join Sravanth, Srivatsav & Sathwik in predicting IPL 2026 match winners!
+            Join Sravanth, Srivatsav, Sathwik, Vikhyath & Nithin in predicting IPL 2026 match winners!
           </p>
           <UserAuthModal />
         </div>

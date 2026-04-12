@@ -6,7 +6,7 @@ import { getUserColor, getUserInitials, getTeam, formatMatchDate, formatMatchTim
 import { UserName, TeamCode } from '@/lib/types';
 import { BarChart2, CheckCircle, XCircle, Clock } from 'lucide-react';
 
-const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik'];
+const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];
 
 function PredBadge({ pred, result }: { pred: TeamCode | null; result?: TeamCode | null }) {
   if (!pred) return <span className="text-slate-600 text-xs">—</span>;
@@ -70,7 +70,10 @@ export default function HistoryPage() {
       ) : (
         <div className="glass-card overflow-hidden">
           {/* Table header */}
-          <div className="grid grid-cols-[auto_1fr_repeat(3,_minmax(0,_1fr))_auto] gap-3 px-4 py-3 border-b border-white/5 bg-slate-900/50">
+          <div 
+            className="grid gap-3 px-4 py-3 border-b border-white/5 bg-slate-900/50"
+            style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
+          >
             <div className="text-[10px] text-slate-500 uppercase tracking-wide w-16">Match</div>
             <div className="text-[10px] text-slate-500 uppercase tracking-wide">Teams & Venue</div>
             {USERS.map((u) => (
@@ -94,9 +97,10 @@ export default function HistoryPage() {
               return (
                 <div
                   key={match.id}
-                  className={`grid grid-cols-[auto_1fr_repeat(3,_minmax(0,_1fr))_auto] gap-3 items-center px-4 py-3 hover:bg-white/2 transition-colors ${
+                  className={`grid gap-3 items-center px-4 py-3 hover:bg-white/2 transition-colors ${
                     match.isCompleted ? 'bg-emerald-500/2' : ''
                   }`}
+                  style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
                 >
                   {/* Match # */}
                   <div className="w-16">

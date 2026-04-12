@@ -7,8 +7,8 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'IPL 2026 Predictions — Sravanth, Srivatsav & Sathwik',
-  description: 'A friendly IPL 2026 match prediction contest between three friends. Predict match winners, track scores on the leaderboard, and view match history.',
+  title: 'IPL 2026 Predictions — Sravanth, Srivatsav, Sathwik, Vikhyath & Nithin',
+  description: 'A friendly IPL 2026 match prediction contest between five friends. Predict match winners, track scores on the leaderboard, and view match history.',
 };
 
 export default function RootLayout({

@@ -385,4 +385,4 @@ export const MATCHES: Match[] = [
   },
 ];
 
-export const USERS: string[] = ['Sravanth', 'Srivatsav', 'Sathwik'];
+export const USERS: string[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];

@@ -66,6 +66,8 @@ export function getUserColor(userName: string): string {
     Sravanth: '#F59E0B',
     Srivatsav: '#10B981',
     Sathwik: '#6366F1',
+    Vikhyath: '#EC4899',
+    Nithin: '#8B5CF6',
   };
   return colors[userName] || '#94A3B8';
 }

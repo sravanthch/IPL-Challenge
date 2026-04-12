@@ -90,6 +90,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       Sravanth: null,
       Srivatsav: null,
       Sathwik: null,
+      Vikhyath: null,
+      Nithin: null,
     };
     matchPreds.forEach((p) => {
       predsByUser[p.user_name] = p.predicted_winner as TeamCode;

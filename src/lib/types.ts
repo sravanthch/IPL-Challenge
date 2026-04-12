@@ -1,4 +1,4 @@
-export type UserName = 'Sravanth' | 'Srivatsav' | 'Sathwik';
+export type UserName = 'Sravanth' | 'Srivatsav' | 'Sathwik' | 'Vikhyath' | 'Nithin';
 
 export type TeamCode = 'CSK' | 'MI' | 'RCB' | 'KKR' | 'RR' | 'GT' | 'PBKS' | 'LSG';
 

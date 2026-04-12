@@ -13,7 +13,7 @@ interface Props {
   onPredict: (match: MatchWithData) => void;
 }
 
-const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik'];
+const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];
 
 function PredictionChip({ userName, predicted, result }: {
   userName: UserName;

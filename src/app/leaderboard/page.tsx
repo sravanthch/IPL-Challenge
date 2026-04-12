@@ -6,7 +6,7 @@ import { getUserColor, getUserInitials, getTeam } from '@/lib/utils';
 import { LeaderboardEntry, UserName } from '@/lib/types';
 import { Trophy, Target, TrendingUp, Award } from 'lucide-react';
 
-const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik'];
+const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];
 
 const rankEmoji = ['🥇', '🥈', '🥉'];
 
@@ -204,7 +204,7 @@ export default function LeaderboardPage() {
                 {winner && (
                   <span className="text-xs text-amber-400 font-medium">{winner} won</span>
                 )}
-                <span className="text-xs text-slate-500">{correct}/3 correct</span>
+                <span className="text-xs text-slate-500">{correct}/{USERS.length} correct</span>
               </div>
             );
           })}
