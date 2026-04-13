@@ -15,10 +15,12 @@ interface Props {
 
 const USERS: UserName[] = ['Sravanth', 'Srivatsav', 'Sathwik', 'Vikhyath', 'Nithin'];
 
-function PredictionChip({ userName, predicted, result }: {
+function PredictionChip({ userName, predicted, result, isLocked, isCurrentUser }: {
   userName: UserName;
   predicted: TeamCode | null;
   result?: MatchResult | null;
+  isLocked: boolean;
+  isCurrentUser: boolean;
 }) {
   const color = getUserColor(userName);
   const initials = getUserInitials(userName);
@@ -47,12 +49,16 @@ function PredictionChip({ userName, predicted, result }: {
         )}
       </div>
       <span className="text-[10px] text-slate-500 font-medium truncate w-full text-center">{userName.slice(0, 4)}</span>
-      {predicted && team ? (
+      {predicted && (isLocked || isCurrentUser) && team ? (
         <div
           className="px-1.5 py-0.5 rounded text-[10px] font-bold"
           style={{ background: team.primaryColor + '30', color: team.primaryColor, border: `1px solid ${team.primaryColor}40` }}
         >
           {predicted}
+        </div>
+      ) : predicted ? (
+        <div className="px-1.5 py-0.5 rounded flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20" title="Prediction hidden until locked">
+          <CheckCircle size={10} /> Done
         </div>
       ) : (
         <div className="px-1.5 py-0.5 rounded text-[10px] text-slate-600 border border-slate-700">
@@ -204,6 +210,8 @@ export default function MatchCard({ match, onPredict }: Props) {
               userName={user}
               predicted={match.predictions[user]}
               result={match.result}
+              isLocked={match.isLocked}
+              isCurrentUser={currentUser === user}
             />
           ))}
         </div>
