@@ -22,23 +22,20 @@ export default function LeaderboardPage() {
       matchesWithData.forEach((match) => {
         const pred = match.predictions[user];
         if (pred) {
-          total++;
-          if (match.result) {
+          // Only count predictions for completed matches
+          if (match.isCompleted) {
+            total++;
             // NR matches don't award points to anyone
             if (match.result !== 'NR' && pred === match.result) correct++;
-            // NR matches still count as decided (not pending), but don't affect accuracy
           } else if (match.isLocked) {
+            // Locked but not completed matches are pending
             pending++;
           }
         }
       });
 
-      // Accuracy: correct / (decided matches that had a real winner, not NR)
-      const nrCount = matchesWithData.filter(
-        (m) => m.result === 'NR' && m.predictions[user]
-      ).length;
-      const decided = total - pending - nrCount;
-      const accuracy = decided > 0 ? Math.round((correct / decided) * 100) : 0;
+      // Accuracy: correct / total completed predictions (excluding NR matches)
+      const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
 
       return { userName: user, correct, total, pending, accuracy };
     }).sort((a, b) => b.correct - a.correct || b.accuracy - a.accuracy);
