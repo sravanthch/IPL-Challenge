@@ -33,6 +33,76 @@ function PredBadge({ pred, result }: { pred: TeamCode | null; result?: MatchResu
   );
 }
 
+// Mobile-friendly prediction card component
+function MobileMatchCard({ match, USERS }: any) {
+  const t1 = getTeam(match.team1);
+  const t2 = getTeam(match.team2);
+  
+  return (
+    <div className={`p-4 border border-white/5 rounded-lg ${match.isCompleted ? 'bg-emerald-500/5' : 'bg-slate-800/30'}`}>
+      {/* Match and date */}
+      <div className="mb-3">
+        <div className="text-xs font-medium text-slate-500 mb-1">Match #{match.id}</div>
+        <p className="text-[10px] text-slate-600">{formatMatchDate(match.matchDate)} • {formatMatchTime(match.matchTime)}</p>
+      </div>
+
+      {/* Teams vs */}
+      <div className="mb-3">
+        <div className="flex items-center gap-1.5 text-sm font-semibold text-white mb-1">
+          <span style={{ color: t1.primaryColor }}>{match.team1}</span>
+          <span className="text-slate-600 text-xs">vs</span>
+          <span style={{ color: t2.primaryColor }}>{match.team2}</span>
+        </div>
+        <div className="text-[11px] text-slate-600">
+          {match.venue.split(',')[0]}
+        </div>
+      </div>
+
+      {/* Result */}
+      <div className="mb-3 pb-3 border-b border-white/5">
+        {match.result === 'NR' ? (
+          <span className="text-[10px] text-slate-400 font-bold italic px-2 py-1 bg-slate-800/80 rounded inline-block">
+            No Result
+          </span>
+        ) : match.result ? (
+          <div>
+            <div
+              className="text-xs font-bold px-2 py-0.5 rounded inline-block"
+              style={{
+                background: getTeam(match.result).primaryColor + '25',
+                color: getTeam(match.result).primaryColor,
+              }}
+            >
+              {match.result} won
+            </div>
+          </div>
+        ) : match.isLocked ? (
+          <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-0.5 rounded inline-block">Awaiting</span>
+        ) : null}
+      </div>
+
+      {/* Predictions */}
+      <div className="space-y-2">
+        <div className="text-xs text-slate-400 font-medium mb-2">Predictions:</div>
+        {USERS.map((u: UserName) => (
+          <div key={u} className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-slate-900 flex-shrink-0"
+                style={{ background: getUserColor(u) }}
+              >
+                {getUserInitials(u)}
+              </div>
+              <span className="text-xs text-slate-300 truncate">{u}</span>
+            </div>
+            <PredBadge pred={match.predictions[u]} result={match.result} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function HistoryPage() {
   const { matchesWithData } = useApp();
 
@@ -47,17 +117,17 @@ export default function HistoryPage() {
   const completedCount = matchesWithData.filter(m => m.isCompleted).length;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-3 md:px-4 py-6 md:py-8">
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6 md:mb-8">
         <div className="inline-flex items-center gap-2 bg-blue-400/10 border border-blue-400/20 text-blue-400 text-xs font-medium px-3 py-1.5 rounded-full mb-4">
           <BarChart2 size={12} />
           Match Archive
         </div>
-        <h1 className="text-3xl md:text-4xl font-black text-white mb-2">
+        <h1 className="text-2xl md:text-4xl font-black text-white mb-2">
           Match <span className="gold-shimmer">History</span>
         </h1>
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-400 text-xs md:text-sm">
           {completedCount} results entered • {historyMatches.length} matches in history
         </p>
       </div>
@@ -68,94 +138,104 @@ export default function HistoryPage() {
           <p>No match history yet — check back after the first deadline passes!</p>
         </div>
       ) : (
-        <div className="glass-card overflow-hidden">
-          {/* Table header */}
-          <div 
-            className="grid gap-3 px-4 py-3 border-b border-white/5 bg-slate-900/50"
-            style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
-          >
-            <div className="text-[10px] text-slate-500 uppercase tracking-wide w-16">Match</div>
-            <div className="text-[10px] text-slate-500 uppercase tracking-wide">Teams & Venue</div>
-            {USERS.map((u) => (
-              <div key={u} className="text-center">
-                <div
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-slate-900 mx-auto"
-                  style={{ background: getUserColor(u) }}
-                >
-                  {getUserInitials(u)}
-                </div>
-              </div>
+        <>
+          {/* Mobile View - Card Layout */}
+          <div className="md:hidden space-y-3">
+            {historyMatches.map((match) => (
+              <MobileMatchCard key={match.id} match={match} USERS={USERS} />
             ))}
-            <div className="text-[10px] text-slate-500 uppercase tracking-wide text-center w-20">Result</div>
           </div>
 
-          {/* Match rows */}
-          <div className="divide-y divide-white/5">
-            {historyMatches.map((match) => {
-              const t1 = getTeam(match.team1);
-              const t2 = getTeam(match.team2);
-              return (
-                <div
-                  key={match.id}
-                  className={`grid gap-3 items-center px-4 py-3 hover:bg-white/2 transition-colors ${
-                    match.isCompleted ? 'bg-emerald-500/2' : ''
-                  }`}
-                  style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
-                >
-                  {/* Match # */}
-                  <div className="w-16">
-                    <div className="text-xs font-medium text-slate-500">#{match.id}</div>
-                    <div className="text-[10px] text-slate-600">{formatMatchDate(match.matchDate)}</div>
-                    <div className="text-[10px] text-slate-600">{formatMatchTime(match.matchTime)}</div>
-                  </div>
-
-                  {/* Teams */}
-                  <div>
-                    <div className="flex items-center gap-1.5 text-sm font-semibold text-white">
-                      <span style={{ color: t1.primaryColor }}>{match.team1}</span>
-                      <span className="text-slate-600 text-xs">vs</span>
-                      <span style={{ color: t2.primaryColor }}>{match.team2}</span>
-                    </div>
-                    <div className="text-[10px] text-slate-600 mt-0.5 truncate max-w-[180px]">
-                      {match.venue.split(',')[0]}
-                    </div>
-                  </div>
-
-                  {/* Predictions per user */}
-                  {USERS.map((u) => (
-                    <div key={u} className="flex justify-center">
-                      <PredBadge pred={match.predictions[u]} result={match.result} />
-                    </div>
-                  ))}
-
-                  {/* Result */}
-                  <div className="w-20 text-center">
-                    {match.result === 'NR' ? (
-                      <span className="text-[10px] text-slate-400 font-bold italic px-2 py-1 bg-slate-800/80 rounded">
-                        No Result
-                      </span>
-                    ) : match.result ? (
-                      <div>
-                        <div
-                          className="text-xs font-bold px-2 py-0.5 rounded"
-                          style={{
-                            background: getTeam(match.result).primaryColor + '25',
-                            color: getTeam(match.result).primaryColor,
-                          }}
-                        >
-                          {match.result}
-                        </div>
-                        <div className="text-[9px] text-slate-500 mt-0.5">won</div>
-                      </div>
-                    ) : match.isLocked ? (
-                      <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-0.5 rounded">Awaiting</span>
-                    ) : null}
+          {/* Desktop View - Table Layout */}
+          <div className="hidden md:block glass-card overflow-x-auto">
+            {/* Table header */}
+            <div 
+              className="grid gap-3 px-4 py-3 border-b border-white/5 bg-slate-900/50"
+              style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
+            >
+              <div className="text-[10px] text-slate-500 uppercase tracking-wide w-16">Match</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wide">Teams & Venue</div>
+              {USERS.map((u) => (
+                <div key={u} className="text-center">
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-slate-900 mx-auto"
+                    style={{ background: getUserColor(u) }}
+                  >
+                    {getUserInitials(u)}
                   </div>
                 </div>
-              );
-            })}
+              ))}
+              <div className="text-[10px] text-slate-500 uppercase tracking-wide text-center w-20">Result</div>
+            </div>
+
+            {/* Match rows */}
+            <div className="divide-y divide-white/5">
+              {historyMatches.map((match) => {
+                const t1 = getTeam(match.team1);
+                const t2 = getTeam(match.team2);
+                return (
+                  <div
+                    key={match.id}
+                    className={`grid gap-3 items-center px-4 py-3 hover:bg-white/2 transition-colors ${
+                      match.isCompleted ? 'bg-emerald-500/2' : ''
+                    }`}
+                    style={{ gridTemplateColumns: `auto 1fr repeat(${USERS.length}, minmax(0, 1fr)) auto` }}
+                  >
+                    {/* Match # */}
+                    <div className="w-16">
+                      <div className="text-xs font-medium text-slate-500">#{match.id}</div>
+                      <div className="text-[10px] text-slate-600">{formatMatchDate(match.matchDate)}</div>
+                      <div className="text-[10px] text-slate-600">{formatMatchTime(match.matchTime)}</div>
+                    </div>
+
+                    {/* Teams */}
+                    <div>
+                      <div className="flex items-center gap-1.5 text-sm font-semibold text-white">
+                        <span style={{ color: t1.primaryColor }}>{match.team1}</span>
+                        <span className="text-slate-600 text-xs">vs</span>
+                        <span style={{ color: t2.primaryColor }}>{match.team2}</span>
+                      </div>
+                      <div className="text-[10px] text-slate-600 mt-0.5 truncate max-w-[180px]">
+                        {match.venue.split(',')[0]}
+                      </div>
+                    </div>
+
+                    {/* Predictions per user */}
+                    {USERS.map((u) => (
+                      <div key={u} className="flex justify-center">
+                        <PredBadge pred={match.predictions[u]} result={match.result} />
+                      </div>
+                    ))}
+
+                    {/* Result */}
+                    <div className="w-20 text-center">
+                      {match.result === 'NR' ? (
+                        <span className="text-[10px] text-slate-400 font-bold italic px-2 py-1 bg-slate-800/80 rounded">
+                          No Result
+                        </span>
+                      ) : match.result ? (
+                        <div>
+                          <div
+                            className="text-xs font-bold px-2 py-0.5 rounded"
+                            style={{
+                              background: getTeam(match.result).primaryColor + '25',
+                              color: getTeam(match.result).primaryColor,
+                            }}
+                          >
+                            {match.result}
+                          </div>
+                          <div className="text-[9px] text-slate-500 mt-0.5">won</div>
+                        </div>
+                      ) : match.isLocked ? (
+                        <span className="text-[10px] text-slate-600 bg-slate-800/60 px-2 py-0.5 rounded">Awaiting</span>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
