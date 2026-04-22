@@ -101,7 +101,6 @@ export default function HomePage() {
 
       {/* Filter tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
-        <Filter size={16} className="text-slate-500 my-auto flex-shrink-0" />
         {filterBtns.map(({ key, label, count }) => (
           <button
             key={key}
