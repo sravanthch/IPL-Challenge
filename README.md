@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IPL Predictions 🏏
 
-## Getting Started
+A fun website/mobile app created by **Sravanth** for a friendly IPL prediction challenge with **Srivatsav**, **Nithin**, **Sathwik** and **Vikhyath**. Challenge your friends, track every game, and see who truly knows the game!
 
-First, run the development server:
+## 🚀 Project Overview
+IPL Predictions is an interactive platform built for the IPL season. It provides a seamless experience for participants to submit their match-winner predictions, track scores, and compete for the top spot on the leaderboard.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Key Features
+- **Match Predictions**: Predict the winner for every IPL match before the scheduled deadline.
+- **Real-time Leaderboard**: Dynamic rankings that update as matches conclude, keeping the competition fierce.
+- **Discord Alerts**: Real-time notifications sent to participants on Discord 1 hour before every match if they haven't submitted their prediction yet.
+- **Analytics & Insights**: Track performance trends and prediction accuracy throughout the tournament.
+- **Match History**: Comprehensive view of all past predictions and match results.
+- **Mobile Optimized**: A premium, mobile-first design ensuring a smooth experience on any device.
+- **Admin Control**: Robust admin panel for updating results and managing match schedules.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Built With
+- **Next.js**: High-performance React framework for the web.
+- **Tailwind CSS**: Modern styling for a premium look and feel.
+- **Supabase**: Scalable database and authentication.
+- **Discord API**: Automated reminders and integration.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Created with passion for cricket by Sravanth.*
