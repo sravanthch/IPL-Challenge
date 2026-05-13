@@ -35,7 +35,16 @@ export default function AdminPage() {
 
   // Only show locked (deadline passed) matches that don't have a result yet + completed ones
   const adminMatches = useMemo(() => {
-    return matchesWithData.filter((m) => m.isLocked).sort((a, b) => a.id - b.id);
+    return matchesWithData
+      .filter((m) => m.isLocked)
+      .sort((a, b) => {
+        // First sort by completion status (false/not completed first)
+        if (a.isCompleted !== b.isCompleted) {
+          return a.isCompleted ? 1 : -1;
+        }
+        // Then sort by match ID (chronological)
+        return a.id - b.id;
+      });
   }, [matchesWithData]);
 
   const handleSaveResult = async () => {
