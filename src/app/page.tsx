@@ -8,6 +8,7 @@ import PredictionModal from '@/components/PredictionModal';
 import { MatchWithData } from '@/lib/types';
 import { formatMatchDate } from '@/lib/utils';
 import { Filter, Trophy, Zap } from 'lucide-react';
+import WinnerFlyer from '@/components/WinnerFlyer';
 
 type FilterType = 'upcoming' | 'locked' | 'completed' | 'all';
 
@@ -54,6 +55,7 @@ export default function HomePage() {
 
   return (
     <div className="main-container pt-2 md:pt-6 pb-10">
+      <WinnerFlyer />
       {/* Hero */}
       <div className="text-left md:text-center mb-8 md:mb-12 pl-1 md:pl-0">
         <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/20 text-amber-400 text-[10px] md:text-xs font-medium px-2.5 py-1 rounded-full mb-3 md:mb-4">
